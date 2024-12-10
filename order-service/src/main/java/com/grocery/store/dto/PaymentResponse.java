@@ -1,18 +1,15 @@
-package com.grocery.store.entity;
+package com.grocery.store.dto;
 
-import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.stereotype.Component;
 
-@Entity
-@Setter
+@Component
 @Getter
-@NoArgsConstructor
+@Setter
 @AllArgsConstructor
+@NoArgsConstructor
 @ToString
-public class Payment {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class PaymentResponse {
     private Long id;
 
     private Long orderId; // Associated Order ID
