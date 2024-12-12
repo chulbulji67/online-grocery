@@ -1,38 +1,52 @@
 package com.grocery.store.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.grocery.store.dto.Orders;
-import com.grocery.store.entity.Payment;
+import com.grocery.store.dto.Order;
+import com.grocery.store.dto.Payment;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
+
 @Service
 @Slf4j
 public class AsyncPaymentService {
     @Autowired
-    private KafkaTemplate<String, String> kafkaTemplate;
+    private KafkaTemplate<String, Payment> kafkaTemplate;
 
     // Listen for Order Events
-    @KafkaListener(topics = "order-topic", groupId = "payment-group")
-    public void processOrder(String orderMessage) throws JsonProcessingException {
+    @KafkaListener(topics = "order-topic", groupId = "payment-group",  containerFactory = "concurrentKafkaListenerContainerFactory")
+    public void processOrder(Order orderRequest) throws JsonProcessingException {
         log.info("Event consumed by Payment Service");
-        Orders orderRequest = new ObjectMapper().readValue(orderMessage, Orders.class);
+//        Orders orderRequest = new ObjectMapper().readValue(orderMessage, Orders.class);
 
         // Simulate Payment Processing
-        boolean paymentSuccess = true; // Mock payment result
+        boolean paymentSuccess = ThreadLocalRandom.current().nextBoolean(); // Mock payment result
+
         String status = paymentSuccess ? "SUCCESS" : "FAILED";
 
         // Publish Payment Status
-        Payment paymentResponse = new Payment( null, // Auto-generated ID (not needed during processing)
+        if(paymentSuccess){
+        Payment paymentResponse = new Payment( orderRequest.getId(), // Auto-generated ID (not needed during processing)
                 orderRequest.getId(),
                 status,
                 100.0, // Mock amount
                 "Credit Card");
-        kafkaTemplate.send("payment-topic", new ObjectMapper().writeValueAsString(paymentResponse));
-        log.info("Event Published by Payment Service {}",paymentResponse.toString());
+        kafkaTemplate.send("payment-topic", paymentResponse);
+        }
+        else{
+            Payment paymentResponse = new Payment( orderRequest.getId(), // Auto-generated ID (not needed during processing)
+                    orderRequest.getId(),
+                    status,
+                    100.0, // Mock amount
+                    "Credit Card");
+            kafkaTemplate.send("payment-topic", paymentResponse);
+        }
+
+        log.info("Event Published by Payment Service");
     }
 }

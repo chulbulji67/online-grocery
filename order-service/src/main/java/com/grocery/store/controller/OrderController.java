@@ -1,6 +1,7 @@
 package com.grocery.store.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.grocery.store.dto.Order;
 import com.grocery.store.entity.Orders;
 import com.grocery.store.service.AsyncOrderService;
 import com.grocery.store.service.OrderService;
@@ -29,7 +30,7 @@ public class OrderController {
     }
 
     @PostMapping("/async")
-    public ResponseEntity<String> asyncPlaceOrder(@RequestBody Orders orders) {
+    public ResponseEntity<String> asyncPlaceOrder(@RequestBody Order orders) {
         boolean b=false;
         try {
             asyncOrderService.createOrder(orders);

@@ -15,8 +15,8 @@ public class PaymentService {
     @Autowired
     private PaymentRepository paymentRepository;
 
-    @Autowired
-    private KafkaTemplate<String, String> kafkaTemplate;
+//    @Autowired
+//    private KafkaTemplate<String, String> kafkaTemplate;
 
     private static final String PAYMENT_STATUS_TOPIC = "payment-status-updates";
 
@@ -51,7 +51,7 @@ public class PaymentService {
 
     private void notifyPaymentStatus(Payment payment) {
         String message = String.format("Payment for Order ID %d is %s", payment.getOrderId(), payment.getStatus());
-        kafkaTemplate.send(PAYMENT_STATUS_TOPIC, message);
+//        kafkaTemplate.send(PAYMENT_STATUS_TOPIC, message);
         System.out.println("Payment status sent to Kafka: " + message);
     }
 

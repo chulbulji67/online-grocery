@@ -15,7 +15,7 @@ import java.util.List;
 @Setter
 @Getter
 @ToString
-public class Orders {
+public class Order {
 
 
     private Long id;

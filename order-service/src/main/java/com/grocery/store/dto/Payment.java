@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class PaymentResponse {
+public class Payment {
     private Long id;
 
     private Long orderId; // Associated Order ID
