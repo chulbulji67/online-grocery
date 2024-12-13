@@ -27,7 +27,8 @@
 		<module>inventory-service</module>
 		<module>order-service</module>
 		<module>payment-service</module>
-	</modules>
+        <module>notification-service</module>
+    </modules>
     <scm>
 		<connection/>
 		<developerConnection/>
