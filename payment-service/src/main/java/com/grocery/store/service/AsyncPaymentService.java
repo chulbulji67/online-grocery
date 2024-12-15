@@ -2,21 +2,20 @@ package com.grocery.store.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.grocery.store.dto.Order;
-import com.grocery.store.dto.Payment;
+import com.grocery.store.dto.PaymentEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
-import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Service
 @Slf4j
 public class AsyncPaymentService {
     @Autowired
-    private KafkaTemplate<String, Payment> kafkaTemplate;
+    private KafkaTemplate<String, PaymentEvent> kafkaTemplate;
 
     // Listen for Order Events
     @KafkaListener(topics = "order-topic", groupId = "payment-group",  containerFactory = "concurrentKafkaListenerContainerFactory")
@@ -31,7 +30,7 @@ public class AsyncPaymentService {
 
         // Publish Payment Status
         if(paymentSuccess){
-        Payment paymentResponse = new Payment( orderRequest.getId(), // Auto-generated ID (not needed during processing)
+        PaymentEvent paymentResponse = new PaymentEvent( orderRequest.getId(), // Auto-generated ID (not needed during processing)
                 orderRequest.getId(),
                 status,
                 100.0, // Mock amount
@@ -39,7 +38,7 @@ public class AsyncPaymentService {
         kafkaTemplate.send("payment-topic", paymentResponse);
         }
         else{
-            Payment paymentResponse = new Payment( orderRequest.getId(), // Auto-generated ID (not needed during processing)
+            PaymentEvent paymentResponse = new PaymentEvent( orderRequest.getId(), // Auto-generated ID (not needed during processing)
                     orderRequest.getId(),
                     status,
                     100.0, // Mock amount

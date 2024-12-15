@@ -1,6 +1,6 @@
 package com.grocery.store.config;
 
-import com.grocery.store.dto.Payment;
+import com.grocery.store.dto.PaymentEvent;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.context.annotation.Bean;
@@ -16,7 +16,7 @@ import java.util.Map;
 public class KafkaConfigProducer {
 
     @Bean
-    public ProducerFactory<String, Payment> producerFactory(){
+    public ProducerFactory<String, PaymentEvent> producerFactory(){
         Map<String, Object> config = new HashMap<>();
         config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
         config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
@@ -25,7 +25,7 @@ public class KafkaConfigProducer {
     }
 
     @Bean
-    public KafkaTemplate<String , Payment> kafkaTemplate(){
+    public KafkaTemplate<String , PaymentEvent> kafkaTemplate(){
         return new KafkaTemplate<>(producerFactory());
     }
 }

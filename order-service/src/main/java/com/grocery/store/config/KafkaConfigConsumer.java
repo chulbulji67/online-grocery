@@ -1,6 +1,6 @@
 package com.grocery.store.config;
 
-import com.grocery.store.dto.Payment;
+import com.grocery.store.dto.PaymentEvent;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.context.annotation.Bean;
@@ -17,7 +17,7 @@ import java.util.Map;
 public class KafkaConfigConsumer {
 
     @Bean
-    public ConsumerFactory<String, Payment> consumerFactory(){
+    public ConsumerFactory<String, PaymentEvent> consumerFactory(){
         Map<String, Object> config = new HashMap<>();
         config.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,"localhost:9092");
         config.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
@@ -28,8 +28,8 @@ public class KafkaConfigConsumer {
     }
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, Payment> concurrentKafkaListenerContainerFactory(){
-        ConcurrentKafkaListenerContainerFactory<String , Payment> concurrentKafkaListenerContainerFactory= new ConcurrentKafkaListenerContainerFactory<>();
+    public ConcurrentKafkaListenerContainerFactory<String, PaymentEvent> concurrentKafkaListenerContainerFactory(){
+        ConcurrentKafkaListenerContainerFactory<String , PaymentEvent> concurrentKafkaListenerContainerFactory= new ConcurrentKafkaListenerContainerFactory<>();
         concurrentKafkaListenerContainerFactory.setConsumerFactory(consumerFactory());
         return concurrentKafkaListenerContainerFactory;
     }

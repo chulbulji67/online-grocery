@@ -1,15 +1,16 @@
 package com.grocery.store.dto;
 
 import lombok.*;
-import org.springframework.stereotype.Component;
 
-@Component
-@Getter
+
 @Setter
-@AllArgsConstructor
+@Getter
 @NoArgsConstructor
+@AllArgsConstructor
 @ToString
-public class Payment {
+public class PaymentEvent {
+
+
     private Long id;
 
     private Long orderId; // Associated Order ID
