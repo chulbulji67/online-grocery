@@ -19,11 +19,11 @@ public class PaymentSuccessEvent extends NotificationEvent {
         this.status = status;
     }
 
-    public PaymentSuccessEvent(String orderId, String recipientEmail, String message, String status) {
-        super(orderId, recipientEmail);
-        this.message = message;
-        this.status = status;
-    }
+//    public PaymentSuccessEvent(String orderId, String recipientEmail, String message, String status) {
+//        super(orderId, recipientEmail);
+//        this.message = message;
+//        this.status = status;
+//    }
 
     public String getMessage() {
         return message;

@@ -1,5 +1,8 @@
 package com.grocery.store.dto;
 
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor
 public class PaymentFailedEvent extends NotificationEvent {
     private String message;
     private String status;

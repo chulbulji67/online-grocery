@@ -30,17 +30,17 @@ public class OrderService {
             }
         }
 
-        // Update order status and save
-        orders.setStatus("PENDING");
-        Orders savedOrders = orderRepository.save(orders);
+        // Update order status and save (Not Now After Payment It will be)
+//        orders.setStatus("PENDING");
+//        Orders savedOrders = orderRepository.save(orders);
 
-        // Deduct stock
-        for (OrderItem item : savedOrders.getItems()) {
-            deductStock(item.getProductCode(), item.getQuantity());
-        }
+        // Deduct stock (Not Now After Payment It will be)
+//        for (OrderItem item : savedOrders.getItems()) {
+//            deductStock(item.getProductCode(), item.getQuantity());
+//        }
 
-        savedOrders.setStatus("COMPLETED");
-        return orderRepository.save(savedOrders);
+//        savedOrders.setStatus("COMPLETED");
+        return orderRepository.save(orders);
     }
 
     private boolean checkStock(String productCode, int quantity) {

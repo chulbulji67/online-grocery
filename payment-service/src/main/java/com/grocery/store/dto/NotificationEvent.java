@@ -1,5 +1,6 @@
 package com.grocery.store.dto;
 
+
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import lombok.NoArgsConstructor;
@@ -13,6 +14,10 @@ import lombok.NoArgsConstructor;
 public abstract class NotificationEvent {
     private String orderId;
     private String recipientEmail;
+
+//    public NotificationEvent(){
+//
+//    }
 
     public NotificationEvent(String orderId, String recipientEmail) {
         this.orderId = orderId;
@@ -35,4 +40,5 @@ public abstract class NotificationEvent {
         this.recipientEmail = recipientEmail;
     }
 }
+
 

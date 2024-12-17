@@ -1,25 +1,14 @@
 package com.grocery.store.dto;
 
-import lombok.NoArgsConstructor;
-
-import java.util.List;
-
-@NoArgsConstructor
-public class PaymentSuccessEvent extends NotificationEvent {
+public class PaymentFailedEvent extends NotificationEvent {
     private String message;
     private String status;
 
-    private List<OrderItem> items; // List of items with product codes and quantities
+//    public PaymentFailedEvent(){
+//
+//    }
 
-    // Constructor
-    public PaymentSuccessEvent(String orderId, String recipientEmail, String message, String status, List<OrderItem> items) {
-        super(orderId, recipientEmail);
-        this.items = items;
-        this.message = message;
-        this.status = status;
-    }
-
-    public PaymentSuccessEvent(String orderId, String recipientEmail, String message, String status) {
+    public PaymentFailedEvent(String orderId, String recipientEmail, String message, String status) {
         super(orderId, recipientEmail);
         this.message = message;
         this.status = status;
@@ -43,7 +32,7 @@ public class PaymentSuccessEvent extends NotificationEvent {
 
     @Override
     public String toString() {
-        return "PaymentSuccessEvent{" +
+        return "PaymentFailedEvent{" +
                 "orderId='" + getOrderId() + '\'' +
                 ", recipientEmail='" + getRecipientEmail() + '\'' +
                 ", message='" + message + '\'' +
@@ -51,4 +40,3 @@ public class PaymentSuccessEvent extends NotificationEvent {
                 '}';
     }
 }
-
