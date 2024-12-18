@@ -1,10 +1,14 @@
 package com.grocery.store.dto;
 
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.List;
 
 @NoArgsConstructor
+@Getter
+@Setter
 public class PaymentSuccessEvent extends NotificationEvent {
     private String message;
     private String status;
@@ -25,21 +29,22 @@ public class PaymentSuccessEvent extends NotificationEvent {
 //        this.status = status;
 //    }
 
-    public String getMessage() {
-        return message;
-    }
+//    public String getMessage() {
+//        return message;
+//    }
+//
+//    public void setMessage(String message) {
+//        this.message = message;
+//    }
+//
+//    public String getStatus() {
+//        return status;
+//    }
+//
+//    public void setStatus(String status) {
+//        this.status = status;
+//    }
 
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
 
     @Override
     public String toString() {
@@ -48,7 +53,9 @@ public class PaymentSuccessEvent extends NotificationEvent {
                 ", recipientEmail='" + getRecipientEmail() + '\'' +
                 ", message='" + message + '\'' +
                 ", status='" + status + '\'' +
+                ", items=" + items +
                 '}';
     }
+
 }
 

@@ -46,6 +46,7 @@ public class KafkaConfig {
         config.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         config.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
         config.put(JsonDeserializer.TRUSTED_PACKAGES, "*");
+        config.put(JsonDeserializer.TYPE_MAPPINGS, "PaymentSuccessEvent:com.grocery.store.dto.PaymentSuccessEvent,PaymentFailedEvent:com.grocery.store.dto.PaymentFailedEvent");
         return new DefaultKafkaConsumerFactory<>(config);
     }
 }

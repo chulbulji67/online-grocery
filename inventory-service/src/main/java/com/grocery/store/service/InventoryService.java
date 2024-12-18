@@ -48,6 +48,8 @@ public class InventoryService {
         log.info("Received Payment Event: {}", paymentEvent);
 
         if (paymentEvent instanceof PaymentSuccessEvent) {
+            log.info("Received Payment Event: {}", (PaymentSuccessEvent)paymentEvent);
+            if(((PaymentSuccessEvent) paymentEvent).getItems()!=null)
             for (OrderItem item : ((PaymentSuccessEvent) paymentEvent).getItems()) {
                 Inventory inventory = updateStock(item.getProductCode(), item.getQuantity());
                 if (inventory.getStock() < item.getQuantity()) {

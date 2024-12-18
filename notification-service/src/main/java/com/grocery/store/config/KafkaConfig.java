@@ -30,6 +30,8 @@ public class KafkaConfig {
         config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
         config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         config.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
+        config.put(JsonDeserializer.TYPE_MAPPINGS, "PaymentSuccessEvent:com.grocery.store.dto.PaymentSuccessEvent,PaymentFailedEvent:com.grocery.store.dto.PaymentFailedEvent");
+
         return new DefaultKafkaProducerFactory<>(config);
     }
 
@@ -48,6 +50,8 @@ public class KafkaConfig {
         config.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         config.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
         config.put(JsonDeserializer.TRUSTED_PACKAGES, "*");
+        config.put(JsonDeserializer.TYPE_MAPPINGS, "PaymentSuccessEvent:com.grocery.store.dto.PaymentSuccessEvent,PaymentFailedEvent:com.grocery.store.dto.PaymentFailedEvent");
+
         return new DefaultKafkaConsumerFactory<>(config);
     }
 }
