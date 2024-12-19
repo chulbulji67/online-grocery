@@ -54,10 +54,14 @@ public class InventoryService {
                 Inventory inventory = updateStock(item.getProductCode(), item.getQuantity());
                 if (inventory.getStock() < item.getQuantity()) {
                     log.error("Failed to update stock for product: {}", item.getProductCode());
+                }else{
+                    //Update the stock
+                    Inventory inventory1 =   updateStock(item.getProductCode(), item.getQuantity());
+                    log.info("Inventory reduced successfully for Order ID: {} by quantity: {}", paymentEvent.getOrderId(), item.getQuantity());
                 }
             }
 
-            log.info("Inventory reduced successfully for Order ID: {}", paymentEvent.getOrderId());
+
 
         } else if (paymentEvent instanceof PaymentFailedEvent) {
             log.info("Payment failed for Order ID: {}. Inventory remains unchanged.", paymentEvent.getOrderId());

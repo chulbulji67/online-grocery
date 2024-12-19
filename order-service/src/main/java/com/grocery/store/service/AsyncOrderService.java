@@ -43,6 +43,7 @@ public class AsyncOrderService {
 
         Orders savedOrders = orderService.placeOrder(order);
 
+        //Changing to Order so that can be sent to order-topic
         Order processedOrder = Order.builder().id(savedOrders.getId())
                 .items(savedOrders.getItems())
                 .customerName(savedOrders.getCustomerName())
