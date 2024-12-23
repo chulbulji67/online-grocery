@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -39,6 +40,10 @@ public class ProductService {
     // Search for products by name or description with pagination
     public Page<Product> searchProducts(String searchTerm, int page, int size) {
         return productRepository.searchByNameOrDescription(searchTerm, PageRequest.of(page, size));
+    }
+
+    public List<Product> findProductsByProductsName(List<String> productCodes){
+        return productRepository.findByNameIn(productCodes);
     }
 }
 

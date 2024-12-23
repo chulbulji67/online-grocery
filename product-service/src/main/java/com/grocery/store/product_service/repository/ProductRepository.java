@@ -14,4 +14,6 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     // Custom query for searching products by name or description
     @Query("SELECT p FROM Product p WHERE LOWER(p.name) LIKE LOWER(CONCAT('%', :searchTerm, '%')) OR LOWER(p.description) LIKE LOWER(CONCAT('%', :searchTerm, '%'))")
     Page<Product> searchByNameOrDescription(String searchTerm, PageRequest pageRequest);
+
+    List<Product> findByNameIn(List<String> names);
 }

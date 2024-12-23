@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -33,7 +34,11 @@ public class AsyncOrderService {
 
     // Create Order and Publish Event
     public void createOrder(Order orderRequest) throws JsonProcessingException {
+
+        //Validate it from the Product Service
+        List<String> productNames = orderRequest.getItems().stream().map(OrderItem::getProductCode).toList();
 //        1. Check if Product exist in the database or not (Use Order service for this)
+
         //Orders is Entity
         log.info("Checking if the all Items are present in stock or not");
         Orders order = Orders.builder().id(orderRequest.getId())

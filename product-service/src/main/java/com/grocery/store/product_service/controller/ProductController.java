@@ -10,10 +10,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -59,5 +61,10 @@ public class ProductController {
     @GetMapping("/search")
     public ResponseEntity<Page<Product>> searchProducts(@RequestParam String searchTerm, @RequestParam int page, @RequestParam int size) {
         return ResponseEntity.ok(productService.searchProducts(searchTerm, page, size));
+    }
+
+    @GetMapping("/bulk")
+    public ResponseEntity<List<Product>> getProductsByProductCodes(@RequestParam List<String > productCodes){
+       return new ResponseEntity<>(productService.findProductsByProductsName(productCodes), HttpStatus.OK);
     }
 }
