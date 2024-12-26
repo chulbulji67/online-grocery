@@ -13,5 +13,6 @@ import lombok.NoArgsConstructor;
 public class OrderItem {
 
     private String productCode; // Unique code for the product
-    private int quantity; // Quantity ordered
+    private int quantity;// Quantity ordered
+    private double price;
 }

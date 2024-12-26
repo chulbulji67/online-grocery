@@ -7,6 +7,9 @@ import com.grocery.store.entity.Orders;
 import com.grocery.store.repository.OrderRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.annotation.KafkaListener;
 
 import org.springframework.kafka.core.KafkaTemplate;
@@ -37,6 +40,42 @@ public class AsyncOrderService {
 
         //Validate it from the Product Service
         List<String> productNames = orderRequest.getItems().stream().map(OrderItem::getProductCode).toList();
+        //Url to call the productservice
+        String url = "http://localhost:8081/api/products/bulk?productCodes="+String.join(",",productNames);
+        ResponseEntity<List<Product>> productResponse= restTemplate.exchange(url, HttpMethod.GET, null, new ParameterizedTypeReference<>() {
+        });
+
+        //Check the response is null or is empty
+        List<Product> products = productResponse.getBody();
+        log.info("Product from product service is:{}",products);
+        if(products == null || products.isEmpty()){
+            throw new RuntimeException("Your entered product does not match kindly enter correct name");
+        }
+        double totalPrice = 0.0;
+        for(OrderItem orderItem: orderRequest.getItems()){
+            log.info(orderItem.getProductCode());
+            for(Product product: products){
+                log.info(product.getName());
+            }
+            Product product = products.stream()
+                              .filter(prod -> prod.getName().toUpperCase().equals(orderItem.getProductCode().toUpperCase()))
+                              .findFirst()
+                               .orElseThrow(()->new RuntimeException("Product didn't found"));
+
+            orderItem.setPrice(product.getPrice());
+            orderItem.setPrice(product.getPrice());
+            orderItem.setProductCode(product.getName());
+            totalPrice += product.getPrice() * orderItem.getQuantity();
+
+        }
+
+        Orders saveOrder = Orders.builder().customerName(orderRequest.getCustomerName())
+                .items(orderRequest.getItems())
+                .status("PENDING")
+                .price(totalPrice)
+                .build();
+
+        orderRepository.save(saveOrder);
 //        1. Check if Product exist in the database or not (Use Order service for this)
 
         //Orders is Entity
@@ -54,15 +93,20 @@ public class AsyncOrderService {
                 .customerName(savedOrders.getCustomerName())
                 .status(savedOrders.getStatus()).build();
 
-        log.info("Payment Processing");
+        //Saving into the database
+        log.info("Id Of saved order before payment {} price={}",savedOrders.getId(),savedOrders.getPrice());
+        orderRepository.save(savedOrders);
+
+        log.info("event sent to Order topic ,Payment Processing");
         kafkaTemplate.send("order-topic", processedOrder);
 
         //Deduct from inventory if Payment success
 
         // Save order details to the database (optional)
+
         log.info("Processed Order is going ");
 
-        log.info("event sent to Order topic");
+
     }
 
     // Listen for Payment Status Updates
@@ -76,6 +120,11 @@ public class AsyncOrderService {
             NotificationEvent notificationEvent = new PaymentSuccessEvent((paymentSuccessEvent.getOrderId()+""),
                     "chulbulji67@gmail.com","Your payment is Success", paymentSuccessEvent.getStatus());
 
+            //Update the Order also in the database
+            Orders orders = orderRepository.findById(Long.parseLong(paymentResponse.getOrderId())).orElseThrow(()->new RuntimeException("Product Not Found"));
+            orders.setStatus("SUCCESS");
+            log.info("Id Of saved order before payment {},{}",orders.getId(),orders.getPrice());
+            orderRepository.save(orders);
             //Send Notification That Payment is success
             kafkaTemplate.send("notification-topic", notificationEvent);
             log.info("Your Order Placed");
@@ -87,6 +136,12 @@ public class AsyncOrderService {
             NotificationEvent notificationEvent = new PaymentFailedEvent((paymentResponse.getOrderId()+""),
                     "chulbulji67@gmail.com","Your Payment Failed", paymentFailedEvent.getStatus());
 
+            //Change in database also
+            //Update the Order also in the database
+            Orders orders = orderRepository.findById(Long.parseLong(paymentResponse.getOrderId())).orElseThrow(()->new RuntimeException("Product Not Found"));
+            orders.setStatus("CANCEL");
+            log.info("Id Of saved order before payment {},{}",orders.getId(),orders.getPrice());
+            orderRepository.save(orders);
             //Send Notification That Payment is success
             kafkaTemplate.send("notification-topic", notificationEvent);
             log.info("Your Order Can't be placed");

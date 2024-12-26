@@ -26,5 +26,7 @@ public class Orders {
     private List<OrderItem> items; // List of items in the order
 
     private String status; // PENDING, COMPLETED, CANCELLED
+
+    private double price;
 }
 
