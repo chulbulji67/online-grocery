@@ -40,7 +40,7 @@ public class OrderService {
 //        }
 
 //        savedOrders.setStatus("COMPLETED");
-        return orderRepository.save(orders);
+        return orders;
     }
 
     private boolean checkStock(String productCode, int quantity) {

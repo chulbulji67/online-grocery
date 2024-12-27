@@ -63,7 +63,6 @@ public class AsyncOrderService {
                                .orElseThrow(()->new RuntimeException("Product didn't found"));
 
             orderItem.setPrice(product.getPrice());
-            orderItem.setPrice(product.getPrice());
             orderItem.setProductCode(product.getName());
             totalPrice += product.getPrice() * orderItem.getQuantity();
 
@@ -75,7 +74,7 @@ public class AsyncOrderService {
                 .price(totalPrice)
                 .build();
 
-        orderRepository.save(saveOrder);
+//        orderRepository.save(saveOrder);
 //        1. Check if Product exist in the database or not (Use Order service for this)
 
         //Orders is Entity
@@ -88,14 +87,17 @@ public class AsyncOrderService {
         Orders savedOrders = orderService.placeOrder(order);
 
         //Changing to Order so that can be sent to order-topic
+
+
+        //Saving into the database
+//        log.info("Id Of saved order before payment {} price={}",savedOrders.getId(),savedOrders.getPrice());
+        savedOrders = orderRepository.save(saveOrder);
+        log.info("Id Of saved order before payment {} price={}",savedOrders.getId(),savedOrders.getPrice());
+
         Order processedOrder = Order.builder().id(savedOrders.getId())
                 .items(savedOrders.getItems())
                 .customerName(savedOrders.getCustomerName())
                 .status(savedOrders.getStatus()).build();
-
-        //Saving into the database
-        log.info("Id Of saved order before payment {} price={}",savedOrders.getId(),savedOrders.getPrice());
-        orderRepository.save(savedOrders);
 
         log.info("event sent to Order topic ,Payment Processing");
         kafkaTemplate.send("order-topic", processedOrder);
