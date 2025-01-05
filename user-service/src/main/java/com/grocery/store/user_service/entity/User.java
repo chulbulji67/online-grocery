@@ -2,6 +2,7 @@ package com.grocery.store.user_service.entity;
 
 
 
+import com.grocery.store.user_service.util.Role;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -32,6 +33,8 @@ public class User {
     private String email;
 
     private String fullName;
+
+    private Role role;
 
     // Getters and Setters
 }
