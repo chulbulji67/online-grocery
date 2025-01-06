@@ -29,7 +29,8 @@
 		<module>payment-service</module>
         <module>notification-service</module>
         <module>api-gateway</module>
-    </modules>
+		<module>eureka-server</module>
+	</modules>
     <scm>
 		<connection/>
 		<developerConnection/>
