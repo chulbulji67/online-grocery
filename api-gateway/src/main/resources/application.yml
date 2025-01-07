@@ -12,6 +12,30 @@ spring:
             - Path=/api/products/**
           filters:
             - name: JwtAuthenticationFilter
+        - id: inventory-service
+          uri: http://localhost:8082
+          predicates:
+            - Path=/api/inventory/**
+          filters:
+            - name: JwtAuthenticationFilter
+        - id: notification-service
+          uri: http://localhost:8085
+          predicates:
+            - Path=/api/notifications/**
+          filters:
+            - name: JwtAuthenticationFilter
+        - id: order-service
+          uri: http://localhost:8083
+          predicates:
+            - Path=/api/orders/**
+          filters:
+            - name: JwtAuthenticationFilter
+        - id: payment-service
+          uri: http://localhost:8084
+          predicates:
+            - Path=/api/payments/**
+          filters:
+            - name: JwtAuthenticationFilter
 
 
 
