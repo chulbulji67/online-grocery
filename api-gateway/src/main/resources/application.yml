@@ -3,39 +3,40 @@ spring:
     gateway:
       routes:
         - id: user-service
-          uri: http://localhost:8080
+          uri: lb://user-service
           predicates:
             - Path=/api/users/**
         - id: product-service
-          uri: http://localhost:8081
+          uri: lb://product-service
           predicates:
             - Path=/api/products/**
           filters:
             - name: JwtAuthenticationFilter
         - id: inventory-service
-          uri: http://localhost:8082
+          uri: lb://inventory-service
           predicates:
             - Path=/api/inventory/**
           filters:
             - name: JwtAuthenticationFilter
         - id: notification-service
-          uri: http://localhost:8085
+          uri: lb://notification-service
           predicates:
             - Path=/api/notifications/**
           filters:
             - name: JwtAuthenticationFilter
         - id: order-service
-          uri: http://localhost:8083
+          uri: lb://order-service
           predicates:
             - Path=/api/orders/**
           filters:
             - name: JwtAuthenticationFilter
         - id: payment-service
-          uri: http://localhost:8084
+          uri: lb://payment-service
           predicates:
             - Path=/api/payments/**
           filters:
             - name: JwtAuthenticationFilter
+
 
 
 
@@ -46,6 +47,12 @@ spring:
 spring:
   application:
     name: API-GATEWAY # Name of your microservice, visible in Eureka dashboard
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true  # Enables service discovery locator
+
 
 eureka:
   client:
