@@ -19,7 +19,7 @@ public class OrderService {
     @Autowired
     private RestTemplate restTemplate;
 
-    private static final String INVENTORY_URL = "http://localhost:8082/api/inventory";
+    private static final String INVENTORY_URL = "http://INVENTORY-SERVICE/api/inventory/";
 
     public Orders placeOrder(Orders orders) {
         // Validate stock for each item
@@ -44,7 +44,9 @@ public class OrderService {
     }
 
     private boolean checkStock(String productCode, int quantity) {
-        String url = INVENTORY_URL + "/" + productCode;
+        String url = INVENTORY_URL + productCode;
+
+//        String url = INVENTORY_URL + "/" + productCode;
         InventoryResponse inventoryResponse = restTemplate.getForObject(url, InventoryResponse.class);
 
         if (inventoryResponse == null || inventoryResponse.getStock() < quantity) {
@@ -55,8 +57,8 @@ public class OrderService {
     }
 
     private void deductStock(String productCode, int quantity) {
-        String url = INVENTORY_URL + "/update-stock/" + productCode + "?quantity=" + quantity;
-        restTemplate.put(url, null);
+//        String url = "http://inventory-service/update-stock/" + productCode + "?quantity=" + quantity;
+//        restTemplate.put(url, null);
     }
 
     public Optional<Orders> getOrderById(Long orderId) {

@@ -41,7 +41,7 @@ public class AsyncOrderService {
         //Validate it from the Product Service
         List<String> productNames = orderRequest.getItems().stream().map(OrderItem::getProductCode).toList();
         //Url to call the productservice
-        String url = "http://localhost:8081/api/products/bulk?productCodes="+String.join(",",productNames);
+        String url = "http://product-service/api/products/bulk?productCodes="+String.join(",",productNames);
         ResponseEntity<List<Product>> productResponse= restTemplate.exchange(url, HttpMethod.GET, null, new ParameterizedTypeReference<>() {
         });
 
