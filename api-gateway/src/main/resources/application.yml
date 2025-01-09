@@ -52,6 +52,9 @@ spring:
       discovery:
         locator:
           enabled: true  # Enables service discovery locator
+    cloud:
+      config:
+        uri: http://localhost:8888
 
 
 eureka:

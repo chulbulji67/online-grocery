@@ -1,9 +1,22 @@
+
+
+
+---
+
+
 spring:
   application:
-    name: USER-SERVICE # Name of your microservice, visible in Eureka dashboard
+    name: config-server # Name of your microservice, visible in Eureka dashboard
   cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true  # Enables service discovery locator
     config:
-      uri: http://localhost:8888
+      server:
+        git:
+          uri: https://github.com/chulbulji67/config-repo
+
 
 eureka:
   client:
@@ -15,4 +28,9 @@ eureka:
   instance:
     prefer-ip-address: true                      # Use IP address instead of hostname for service registration
     instance-id: ${spring.application.name}:${spring.cloud.client.hostname}:${server.port} # Unique identifier for this instance
+
+
+
+
+
 
