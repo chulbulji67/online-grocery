@@ -1,9 +1,8 @@
 spring:
   application:
     name: USER-SERVICE # Name of your microservice, visible in Eureka dashboard
-  cloud:
-    config:
-      uri: http://localhost:8888
+  config:
+    import: optional:configserver:http://localhost:8888
 
 eureka:
   client:

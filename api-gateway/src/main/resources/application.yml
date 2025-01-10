@@ -1,42 +1,42 @@
-spring:
-  cloud:
-    gateway:
-      routes:
-        - id: user-service
-          uri: lb://user-service
-          predicates:
-            - Path=/api/users/**
-        - id: product-service
-          uri: lb://product-service
-          predicates:
-            - Path=/api/products/**
-          filters:
-            - name: JwtAuthenticationFilter
-        - id: inventory-service
-          uri: lb://inventory-service
-          predicates:
-            - Path=/api/inventory/**
-          filters:
-            - name: JwtAuthenticationFilter
-        - id: notification-service
-          uri: lb://notification-service
-          predicates:
-            - Path=/api/notifications/**
-          filters:
-            - name: JwtAuthenticationFilter
-        - id: order-service
-          uri: lb://order-service
-          predicates:
-            - Path=/api/orders/**
-          filters:
-            - name: JwtAuthenticationFilter
-        - id: payment-service
-          uri: lb://payment-service
-          predicates:
-            - Path=/api/payments/**
-          filters:
-            - name: JwtAuthenticationFilter
-
+#spring:
+#  cloud:
+#    gateway:
+#      routes:
+#        - id: user-service
+#          uri: lb://user-service
+#          predicates:
+#            - Path=/api/users/**
+#        - id: product-service
+#          uri: lb://product-service
+#          predicates:
+#            - Path=/api/products/**
+#          filters:
+#            - name: JwtAuthenticationFilter
+#        - id: inventory-service
+#          uri: lb://inventory-service
+#          predicates:
+#            - Path=/api/inventory/**
+#          filters:
+#            - name: JwtAuthenticationFilter
+#        - id: notification-service
+#          uri: lb://notification-service
+#          predicates:
+#            - Path=/api/notifications/**
+#          filters:
+#            - name: JwtAuthenticationFilter
+#        - id: order-service
+#          uri: lb://order-service
+#          predicates:
+#            - Path=/api/orders/**
+#          filters:
+#            - name: JwtAuthenticationFilter
+#        - id: payment-service
+#          uri: lb://payment-service
+#          predicates:
+#            - Path=/api/payments/**
+#          filters:
+#            - name: JwtAuthenticationFilter
+#
 
 
 
@@ -52,20 +52,19 @@ spring:
       discovery:
         locator:
           enabled: true  # Enables service discovery locator
-    cloud:
-      config:
-        uri: http://localhost:8888
+  config:
+    import: optional:configserver:http://localhost:8888
 
 
-eureka:
-  client:
-    service-url:
-      defaultZone: http://localhost:8761/eureka/ # URL of the Eureka server
-    register-with-eureka: true                   # Register this service with Eureka
-    fetch-registry: true                         # Fetch the registry of other services
-
-  instance:
-    prefer-ip-address: true                      # Use IP address instead of hostname for service registration
-    instance-id: ${spring.application.name}:${spring.cloud.client.hostname}:${server.port} # Unique identifier for this instance
-
+#eureka:
+#  client:
+#    service-url:
+#      defaultZone: http://localhost:8761/eureka/ # URL of the Eureka server
+#    register-with-eureka: true                   # Register this service with Eureka
+#    fetch-registry: true                         # Fetch the registry of other services
+#
+#  instance:
+#    prefer-ip-address: true                      # Use IP address instead of hostname for service registration
+#    instance-id: ${spring.application.name}:${spring.cloud.client.hostname}:${server.port} # Unique identifier for this instance
+#
 

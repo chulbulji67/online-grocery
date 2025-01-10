@@ -2,6 +2,10 @@ package com.grocery.store.service;
 
 import com.grocery.store.entity.Payment;
 import com.grocery.store.repository.PaymentRepository;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
+import io.github.resilience4j.retry.annotation.Retry;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
@@ -10,6 +14,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.Random;
 
 @Service
+@Slf4j
 public class PaymentService {
 
     @Autowired
@@ -25,14 +30,22 @@ public class PaymentService {
     @Autowired
     RestTemplate restTemplate;
 
-    public Payment processPayment(Payment payment) {
+    @Retry(name = "default1")
+    @CircuitBreaker(name = "default1", fallbackMethod = "fallbackMethod")
+    @RateLimiter(name = "default1")
+    public Payment processPayment(Payment payment) throws Exception{
+
+        log.info("Process Payment called");
         payment.setStatus("PENDING");
         Payment savedPayment = paymentRepository.save(payment);
 
         // Simulate a mock payment gateway processing
         boolean isSuccess = mockPaymentGateway();
 
-
+        // Artificially induce a failure to simulate a fallback scenario
+        if (!isSuccess) {
+            throw new RuntimeException("Payment gateway failed");
+        }
 
         // Update payment status
         savedPayment.setStatus(isSuccess ? "SUCCESS" : "FAILED");
@@ -45,8 +58,9 @@ public class PaymentService {
     }
 
     private boolean mockPaymentGateway() {
-        // Simulate payment success or failure randomly
+//         Simulate payment success or failure randomly
         return new Random().nextBoolean();
+//        return false;
     }
 
     private void notifyPaymentStatus(Payment payment) {
@@ -57,5 +71,9 @@ public class PaymentService {
 
     public Payment getPaymentById(Long paymentId) {
         return paymentRepository.findById(paymentId).orElseThrow(() -> new RuntimeException("Payment not found!"));
+    }
+
+    public static void fallbackMethod(){
+        log.info("Fall Back Method invoked");
     }
 }

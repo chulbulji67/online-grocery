@@ -15,7 +15,7 @@ public class PaymentController {
     private PaymentService paymentService;
 
     @PostMapping
-    public ResponseEntity<Payment> processPayment(@RequestBody Payment payment) {
+    public ResponseEntity<Payment> processPayment(@RequestBody Payment payment) throws Exception{
         Payment processedPayment = paymentService.processPayment(payment);
         return ResponseEntity.ok(processedPayment);
     }
