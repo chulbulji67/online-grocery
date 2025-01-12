@@ -30,7 +30,7 @@ public class PaymentService {
     @Autowired
     RestTemplate restTemplate;
 
-    @Retry(name = "default1")
+//    @Retry(name = "default1")
     @CircuitBreaker(name = "default1", fallbackMethod = "fallbackMethod")
     @RateLimiter(name = "default1")
     public Payment processPayment(Payment payment) throws Exception{

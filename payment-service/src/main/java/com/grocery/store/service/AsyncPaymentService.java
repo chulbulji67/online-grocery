@@ -24,7 +24,7 @@ public class AsyncPaymentService {
     private KafkaTemplate<String, Object> kafkaTemplate;
 
     // Listen for Order Events
-    @Retry(name = "default")
+//    @Retry(name = "default")
     @CircuitBreaker(name = "default", fallbackMethod = "fallbackMethod")
     @RateLimiter(name = "default")
     @KafkaListener(topics = "order-topic", groupId = "payment-group",  containerFactory = "concurrentKafkaListenerContainerFactory")
@@ -58,14 +58,15 @@ public class AsyncPaymentService {
             PaymentFailedEvent paymentFailedEvent = new PaymentFailedEvent( orderRequest.getId()+"", // Auto-generated ID (not needed during processing)
                     "chulbulji67@gmail.com","Your Payment is Failed" ,"FAILED");
             kafkaTemplate.send("payment-topic", paymentFailedEvent);
-            log.info("Payment Success Event send to payment topic is {}", paymentFailedEvent);
+            log.info("Payment Failed Event send to payment topic is {}", paymentFailedEvent);
             throw new RuntimeException("Payment gateway failed");
         }
 
         log.info("Event Published by Payment Service");
     }
 
-    public static void fallbackMethod(){
+    public void fallbackMethod(Order order, Throwable throwable)
+    {
         log.info("Fall Back Method invoked");
     }
 }

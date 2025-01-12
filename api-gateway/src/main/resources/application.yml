@@ -46,16 +46,35 @@
 
 spring:
   application:
-    name: API-GATEWAY # Name of your microservice, visible in Eureka dashboard
+    name: api-gateway # Name of your microservice, visible in Eureka dashboard
   cloud:
     gateway:
       discovery:
         locator:
           enabled: true  # Enables service discovery locator
-  config:
-    import: optional:configserver:http://localhost:8888
+#    config:
+#      import: optional:configserver:http://localhost:8888
+#  zipkin:
+#    base-url: http://localhost:9411 # URL where Zipkin server is running
+#    enabled: true                   # Enable or disable Zipkin tracing
+#    sleuth:
+#      sampler:
+#        probability: 1.0              # Percentage of requests to trace (1.0 = 100%)
+#      web:
+#        client:
+#          enabled: true               # Enable tracing for web clients (e.g., RestTemplate)
+#      messaging:
+#        enabled: true
 
 
+#spring:
+#  application:
+#    name: your-service-name
+#  sleuth:
+#    sampler:
+#      probability: 1.0  # Trace all requests (adjust in production)
+#  zipkin:
+#    base-url: http://localhost:9411
 #eureka:
 #  client:
 #    service-url:

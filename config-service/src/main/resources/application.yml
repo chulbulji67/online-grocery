@@ -14,7 +14,7 @@ spring:
           enabled: true  # Enables service discovery locator
     config:
       server:
-
+        git:
 
 
 eureka:
